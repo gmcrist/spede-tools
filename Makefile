@@ -1,99 +1,68 @@
-######################################################
-#
-# makefile.in (prototype) for FLASH programs
-# $Header: /export/home/spede/Source/Samples/00-Tools/flash/source/RCS/Makefile.in,v 1.4 2001/02/04 01:01:57 aleks Exp $ 
-#
+#------------------------------------------------------------------------------
+# CPE/CSC 159 SPEDE3 Tools Makefile
+# California State University, Sacramento
+#------------------------------------------------------------------------------
 
-## Install warning flag to compiler.
-##	For Solaris 2.5 "cc", use "-vc"
-##	For GNU2, use "-Wall"
-##
+SPEDE_ROOT ?= /opt/spede
+
+BINDIR = $(SPEDE_ROOT)/bin
+ETCDIR = $(SPEDE_ROOT)/etc
+
+SRC_DIR=src
+BUILD_DIR=build
+INC=-Iinclude -Isrc
+
 WARNINGS = -Wall
-CC = gcc
+CC := gcc
 
-#DL_LIBS = -lsocket -lnsl
+CFLAGS += -Wall $(DEFINES)
+LDFLAGS +=
 
-TARGET = -DTARGET_i386
-MODEL = -v -g
-OPT = -O1
+SPEDE_FLASH = flash
+SPEDE_FLINT = fl
+SPEDE_DOWNLOAD = dl
+SPEDE_FLASHSUP = flash-sup
 
-DEFINES = -DFLASH_HOME=\"/gaia/home/project/spede2/Target-i386/i686/tools\" -DTTYPORT=\"/dev/ttyS0\" -DTTYBAUD=38400
+DEFINES = -DTARGET_i386 -DFLASH_HOME=\"/gaia/home/project/spede2/Target-i386/i686/tools\" -DTTYPORT=\"/dev/ttyS0\" -DTTYBAUD=38400
 
-CFLAGS = $(OPT) $(MODEL) $(WARNINGS) $(DEFINES) $(TARGET)
-LDFLAGS = $(MODEL)
+ALL_TARGETS=$(SPEDE_FLASH) $(SPEDE_FLINT) $(SPEDE_DOWNLOAD) $(SPEDE_FLASHSUP)
 
-BINDIR = /gaia/home/project/spede2/Target-i386/i686/tools/bin
-ETCDIR = /gaia/home/project/spede2/Target-i386/i686/tools/etc
+OBJS_FLASH = $(BUILD_DIR)/flash.o $(BUILD_DIR)/cmdinp.o $(BUILD_DIR)/getch.o
+OBJS_FLINT = $(BUILD_DIR)/flint.o $(BUILD_DIR)/flsh.o
+OBJS_DOWNLOAD = $(BUILD_DIR)/download.o
+OBJS_FLASHSUP = $(BUILD_DIR)/flash-sup.o
 
-HDR = flash.h
-FLASH_OBJS = flash.o cmdinp.o getch.o
-FLINT_OBJS = flint.o flsh.o
-DL_OBJS = download.o
-SUP_OBJS = flash-sup.o
+src_to_bin_dir = $(patsubst $(SRC_DIR)%,$(BUILD_DIR)%,$1)
+sources = $(wildcard src/*.c)
+objects = $(call src_to_bin_dir,$(addsuffic .o,$(basename $(sources))))
+depends = $(patsubst %.o,%.d,$(objects))
 
-ALL_SOURCE = b.out.h cmdinp.c download.c flash-sup.c flash.c \
-	flash.h flint.c flsh.c getch.c spede.h
-ALL_PROGRAMS = flash fl dl flash-sup
-
-#
-# ---------------------------
-#
-all:	$(ALL_PROGRAMS)
-
-scrub :	clean
-	sccs clean
+all: $(ALL_TARGETS)
 
 clean:
-	-rm -f *.o core *~ $(ALL_PROGRAMS)
+	@rm -f $(BUILD_DIR)/*
 
-#
-#  Set a rwx--x--x mode upon the program.  Delete them first in case
-#  another user installed them.
-#
-install:	$(ALL_PROGRAMS)
-	(cd $(BINDIR) ; rm -f $(ALL_PROGRAMS) );
-	cp $(ALL_PROGRAMS)  $(BINDIR)
-	(cd $(BINDIR) ; chmod 755 $(ALL_PROGRAMS) );
-	( cd .. ; cp GDB159.RC $(ETCDIR) );
-	chmod 664 $(ETCDIR)/GDB159.RC
+install: $(ALL_TARGETS)
+	install -d $(SPEDE_ROOT)
+	install -d $(BINDIR)
+	install -d $(ETCDIR)
+	(cd $(BUILD_DIR); install -m 0755 $(ALL_TARGETS) $(BINDIR))
 
-source :
-	for i in $(ALL_SOURCE) ; do sccs get $$i ; done;
+$(SPEDE_FLASH): $(OBJS_FLASH) $(HDR)
+	@$(CC) $(LDFLAGS) -o $(BUILD_DIR)/$(SPEDE_FLASH) $(OBJS_FLASH) $(LIBS)
 
-#
-# ---------------------------
-#
-flash:	$(FLASH_OBJS) $(HDR)
-	$(CC) $(LDFLAGS) -o flash $(FLASH_OBJS) $(LIBS)
+$(SPEDE_FLINT): $(OBJS_FLINT)
+	@$(CC) $(LDFLAGS) -o $(BUILD_DIR)/$(SPEDE_FLINT) $(OBJS_FLINT) $(LIBS)
 
-fl: 	$(FLINT_OBJS)
-	$(CC) $(LDFLAGS) -o fl $(FLINT_OBJS) $(LIBS)
+$(SPEDE_DOWNLOAD): $(OBJS_DOWNLOAD)
+	@$(CC) $(LDFLAGS) -o $(BUILD_DIR)/$(SPEDE_DOWNLOAD) $(OBJS_DOWNLOAD) $(LIBS)
 
-dl:	$(DL_OBJS)
-	$(CC) $(LDFLAGS) -o dl $(DL_LIBS) $(DL_OBJS) $(LIBS)
+$(SPEDE_FLASHSUP): $(OBJS_FLASHSUP)
+	@$(CC) $(LDFLAGS) -o $(BUILD_DIR)/$(SPEDE_FLASHSUP) $(OBJS_FLASHSUP) $(LIBS)
 
-flash-sup:	$(SUP_OBJS)
-	$(CC) $(LDFLAGS) -o flash-sup $(SUP_OBJS) $(LIBS)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-
-flash.o :	$(HDR) flash.c
-
-cmdinp.o:	$(HDR) cmdinp.c
-	$(CC) $(CFLAGS) -c cmdinp.c
-
-getch.o:	$(HDR) getch.c
-	$(CC) $(CFLAGS) -c getch.c
-
-flint.o:	$(HDR) flint.c
-	$(CC) $(CFLAGS) -c flint.c
-
-flsh.o:		$(HDR) flsh.c
-	$(CC) $(CFLAGS) -c flsh.c
-
-download.o: download.c b.out.h spede.h $(HDR)
-	$(CC) $(CFLAGS) -c download.c
-
-flash-sup.o: flash-sup.c
-	$(CC) $(CFLAGS) -c flash-sup.c
-
-
+%.o: $(BUILD_DIR)/%.o
+	@mkdir -p $(@D)
