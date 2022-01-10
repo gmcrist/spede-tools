@@ -55,7 +55,7 @@ char *XmitBuf;
     while (1) {
         resptr = res;
         cmd[0] = (char)0;
-        gets(cmd);
+        fgets(cmd, sizeof(cmd), stdin);
 
 #if SW_WATCH
         {
