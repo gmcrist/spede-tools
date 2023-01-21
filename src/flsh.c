@@ -30,7 +30,8 @@ int  getcmd();
 
 /* --------------------------------------------------------------- */
 
-int   flsh(whdl, XmitBuf) int whdl;
+int   flsh(whdl, XmitBuf)
+int   whdl;
 char *XmitBuf;
 {
     char  cmd[MAX_CMD_LINE];
@@ -140,7 +141,8 @@ char *XmitBuf;
     /*NOTREACHED*/
 }
 
-int upd_history(xbuf) char *xbuf;
+int   upd_history(xbuf)
+char *xbuf;
 {
     int i;
     if (strlen(xbuf) == 0)
@@ -159,7 +161,8 @@ int upd_history(xbuf) char *xbuf;
     return 0;
 }
 
-int   getcmd(dst, type, cat) char *dst;
+int   getcmd(dst, type, cat)
+char *dst;
 int   type;
 char *cat;
 {
@@ -199,7 +202,8 @@ void disp_history() {
     for (i = 0; i < hndxtl; i++) printf("[%3d] %s\n", htab[i].hcount, htab[i].cmd);
 }
 
-int weed_ctrlchs(cmd) char *cmd;
+int   weed_ctrlchs(cmd)
+char *cmd;
 {
     while (*cmd) {
         if ((int)*cmd == FLINT_EXIT_CH) {

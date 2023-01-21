@@ -91,11 +91,11 @@ void usage(rc) int rc;
 
 int main(int argc, char *argv[]) {
     char   line[512];
-    char * string;
-    FILE * fp;
+    char  *string;
+    FILE  *fp;
     CONFIG cfg;
     int    j;
-    FILE * diag = stdout;
+    FILE  *diag = stdout;
 
     init_cfg(&cfg);
 
@@ -270,7 +270,8 @@ void config_defaults(cfg) CONFIG *cfg;
  *	Otherwise try and parse, save into `cfg' and return 1.  Comments
  *	return 1.
  */
-int     parse_n_upd(line, cfg) char *line;
+int     parse_n_upd(line, cfg)
+char   *line;
 CONFIG *cfg;
 {
     char *ptr;
@@ -345,7 +346,8 @@ CONFIG *cfg;
     return 1;
 } /* parse_n_upd() */
 
-int check_cfg(cfg) CONFIG *cfg;
+int     check_cfg(cfg)
+CONFIG *cfg;
 {
     if (strlen(cfg->port) == 0) {
         printf("TTYPORT not defined in Flash.cfg\n");

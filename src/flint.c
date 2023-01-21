@@ -56,7 +56,8 @@ void child_cleanup();
  *	the user, and the parent talks with the target computer.
  */
 
-int    main(argc, argv) int argc;
+int    main(argc, argv)
+int    argc;
 char **argv;
 {
     char buffer[256];
@@ -215,8 +216,7 @@ char **argv;
          *  Read from the target and send to the user.
          */
         while (1) {
-            do
-                n = read(rhdl, buffer, sizeof(buffer));
+            do n = read(rhdl, buffer, sizeof(buffer));
             while (n == 0);
 
             if ((n < 0) && (errno != EWOULDBLOCK)) {

@@ -107,7 +107,7 @@ struct termio tbuf, o_tbuf;
 
 struct stat term_stat;
 int         fd_target;
-FILE *      imagef;
+FILE       *imagef;
 int         blk_cnt; /* Counts how much downlaoded. */
 
 time_t start_time; /* Used by ether and serial downloaders */
@@ -174,7 +174,8 @@ void usage(rc) int rc;
     exit(rc);
 }
 
-int    main(argc, argv) int argc;
+int    main(argc, argv)
+int    argc;
 char **argv;
 {
     char *fname;
@@ -677,7 +678,7 @@ void send_abort(fd) int fd;
 int try_ethernet(int targetFD, const char *dli_fname) {
     char           ether_addr[32]; /* MAC string, if ethering. */
     char           temp[256];
-    char *         p;
+    char          *p;
     int            c;
     struct in_addr targetIP;
 
@@ -843,9 +844,10 @@ int try_ethernet(int targetFD, const char *dli_fname) {
  *	GLOBALS:	start_addr (write)
  */
 
-int          grok_object_file(imagef, filehdr, pBlockCnt) FILE *imagef;
+int          grok_object_file(imagef, filehdr, pBlockCnt)
+FILE        *imagef;
 struct bhdr *filehdr;
-long *       pBlockCnt; /* Block size */
+long        *pBlockCnt; /* Block size */
 {
     int           type = -1;
     long          addr;
@@ -1017,7 +1019,8 @@ long *       pBlockCnt; /* Block size */
 
 /* --------------------------------------------------------------- */
 
-int read_sbbb(imagef) FILE *imagef;
+int   read_sbbb(imagef)
+FILE *imagef;
 {
     long addr;
     int  c, count;
@@ -1050,8 +1053,9 @@ int read_sbbb(imagef) FILE *imagef;
     return 0;
 } /* end read_sbbb() */
 
-int  read_elf(imagef, size) FILE *imagef;
-long size;
+int   read_elf(imagef, size)
+FILE *imagef;
+long  size;
 {
     long addr;
     int  c, count;
@@ -1102,7 +1106,8 @@ long size;
     return 0;
 } /* end read_elf() */
 
-int read_abm(imagef) FILE *imagef;
+int   read_abm(imagef)
+FILE *imagef;
 {
     long addr, code_size;
     int  c, count;
@@ -1144,7 +1149,8 @@ int read_abm(imagef) FILE *imagef;
     return 0;
 } /* read_abm() */
 
-int read_ab_out(filhdr) struct bhdr *filhdr;
+int          read_ab_out(filhdr)
+struct bhdr *filhdr;
 {
     char bufr[1024];
     int  bufcnt, c, count;
@@ -1295,7 +1301,8 @@ char *get_home_dir(username) const char *username;
  *	download attempts.
  *	RETURN:  0 = not there, 1 = yes, target has ethernet.
  */
-int   query_ether_addr(target, mac_string) int target;
+int   query_ether_addr(target, mac_string)
+int   target;
 char *mac_string;
 {
     char  input[1024];
@@ -1372,11 +1379,12 @@ void alarm_target_readstring(int signo) { longjmp(jb_done_tr, signo); }
  *	most recent line read is available in `inbuffer'.
  */
 
-int target_readline(inbuffer, size_inbuff, operation_timeout, line_timeout, resp1, resp2, resp3,
-                    resp4) char *inbuffer;
-int size_inbuff;
-int operation_timeout;
-int line_timeout;
+int   target_readline(inbuffer, size_inbuff, operation_timeout, line_timeout, resp1, resp2, resp3,
+                      resp4)
+char *inbuffer;
+int   size_inbuff;
+int   operation_timeout;
+int   line_timeout;
 const char *resp1;
 const char *resp2;
 const char *resp3;

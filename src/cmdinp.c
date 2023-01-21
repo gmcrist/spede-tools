@@ -246,8 +246,9 @@ void cmdinp(cfg) CONFIG *cfg;
 }
 
 /* Expand the command */
-int  expand_cmd(cmdd, i) char *cmdd;
-int *i;
+int   expand_cmd(cmdd, i)
+char *cmdd;
+int  *i;
 {
     int   j;
     int   valid_index = 0;
@@ -291,7 +292,7 @@ CONFIG *cfg;
     FNC_TABLE *cmdtbl;
     int        i;
     int        done;
-    char *     p;
+    char      *p;
 
     cmdtbl = &cmd_table[0];
     done   = 0;
@@ -375,7 +376,8 @@ int long_wait() {
  *************************************************************************
  */
 
-int proc_download(cfg) CONFIG *cfg;
+int     proc_download(cfg)
+CONFIG *cfg;
 {
     char filename[512];
 
@@ -458,7 +460,8 @@ int proc_download(cfg) CONFIG *cfg;
  *************************************************************************
  */
 
-int proc_debug(cfg) CONFIG *cfg;
+int     proc_debug(cfg)
+CONFIG *cfg;
 {
     char gdb_init_fname[128];
     char filename[1024];
@@ -573,7 +576,8 @@ int proc_debug(cfg) CONFIG *cfg;
  *************************************************************************
  */
 
-int proc_flint(cfg) CONFIG *cfg;
+int     proc_flint(cfg)
+CONFIG *cfg;
 {
     /* FLames shell here */
     if (arg_count != 1)
@@ -604,7 +608,8 @@ int proc_flint(cfg) CONFIG *cfg;
  *************************************************************************
  */
 
-int proc_save(cfg) CONFIG *cfg;
+int     proc_save(cfg)
+CONFIG *cfg;
 {
     int j;
 
@@ -659,7 +664,8 @@ int proc_save(cfg) CONFIG *cfg;
  *************************************************************************
  */
 
-int proc_load(cfg) CONFIG *cfg;
+int     proc_load(cfg)
+CONFIG *cfg;
 {
     int   j;
     char *cmd = NULL;
@@ -708,7 +714,8 @@ int proc_load(cfg) CONFIG *cfg;
  *************************************************************************
  */
 
-int proc_make(cfg) CONFIG *cfg;
+int     proc_make(cfg)
+CONFIG *cfg;
 {
     char  buffer[512 + 8];
     char *p;
@@ -750,7 +757,8 @@ int proc_make(cfg) CONFIG *cfg;
  *
  *************************************************************************
  */
-int proc_cd(cfg) CONFIG *cfg;
+int     proc_cd(cfg)
+CONFIG *cfg;
 {
     char  buffer[1024];
     FILE *pread;
@@ -819,7 +827,8 @@ int proc_cd(cfg) CONFIG *cfg;
  *
  *************************************************************************
  */
-int proc_pwd(cfg) CONFIG *cfg;
+int     proc_pwd(cfg)
+CONFIG *cfg;
 {
     char buffer[512 + 8];
 
@@ -885,7 +894,8 @@ int target_readline(int targ, char *buffer, int size_buffer) {
     return (cnt);
 } /* end target_readline() */
 
-int proc_uptracebuffer(cfg) CONFIG *cfg;
+int     proc_uptracebuffer(cfg)
+CONFIG *cfg;
 {
     struct stat term_stat;
 #ifdef HOST_POSIX
@@ -1034,7 +1044,8 @@ int proc_uptracebuffer(cfg) CONFIG *cfg;
 
 /* ------------------------------------------------------------------------ */
 
-int proc_help(cfg) CONFIG *cfg;
+int     proc_help(cfg)
+CONFIG *cfg;
 {
     char border[] = {"***********************************************************************\n"};
 
@@ -1083,7 +1094,8 @@ int proc_help(cfg) CONFIG *cfg;
  *************************************************************************
  */
 
-int proc_quit(cfg) CONFIG *cfg;
+int     proc_quit(cfg)
+CONFIG *cfg;
 {
     printf("\n");
     longjmp(jbCmdLoop, -1);
@@ -1091,7 +1103,8 @@ int proc_quit(cfg) CONFIG *cfg;
     return 0;
 }
 
-int spwords(str) char *str;
+int   spwords(str)
+char *str;
 {
     char *ptr, *src;
     int   count;

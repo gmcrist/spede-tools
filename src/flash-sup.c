@@ -75,7 +75,8 @@ void sig_alarm(signo) int signo;
     ++timeout_count;
 }
 
-int   main(argc, argv) int argc;
+int   main(argc, argv)
+int   argc;
 char *argv[];
 {
     int   j;
