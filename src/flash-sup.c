@@ -10,14 +10,15 @@
 #include <sys/stat.h>
 #include <termios.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 
-#include "flash.h"
+#include "spede.h"
 
-enum cmd_list {
-    CMD_NONE,
-    CMD_GDB,
-    CMD_RUN
-};
+enum cmd_list { CMD_NONE, CMD_GDB, CMD_RUN };
 
 #define CMD_EXEC_GDB "gdb"
 #define CMD_EXEC_RUN "G"
@@ -83,7 +84,7 @@ int main(int argc, char **argv) {
         usage(argv[0], 1);
     }
 
-    dev  = argv[optind++];
+    dev = argv[optind++];
 
     target_fd = open(dev, O_RDWR);
     if (target_fd <= 0) {

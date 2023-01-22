@@ -1,6 +1,17 @@
 #ifndef SPEDE_H
 #define SPEDE_H
 
+#ifdef TTYBAUD
+#define _FLASH_CAT(x, y) x##y
+#define _FLASH_XCAT(a, b) _FLASH_CAT(a, b)
+#define FLASH_BAUD _FLASH_XCAT(B, TTYBAUD)
+#else
+#define FLASH_BAUD B38400
+#endif
+
+/*  Control char to exit the FLINT sub-shell. */
+#define FLINT_EXIT_CH ('X' - 64)
+
 /* misc defines for spedePlus */
 #define STDIN 0
 #define STDOUT 1
@@ -11,21 +22,5 @@
 #define ADOTOUT 4
 #define ELF 5
 #define SBBB 6 /* See http://www.acm.uiuc.edu/sigops/ */
-
-/* define default entry point and stack */
-#define DEFENTRY 0x3000
-#define DEFSTACK 0x80000
-
-/* bits used for various flags */
-#define LISTING 0x4000
-#define MAP 0x2000
-#define XREF 0x1000
-#define OVERFLOW 0x0800
-#define RANGE 0x0400
-#define SMALL 0x0200
-#define WASTE 0x0080
-#define ROM 0x0040
-#define DEBUG 0x0020
-#define VERBOSE 0x0008
 
 #endif

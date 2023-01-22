@@ -13,15 +13,21 @@
  *  is entiredly i386 ELF files.  Sorry.
  */
 
+#include <assert.h>
 #include <sys/stat.h>
 #include <setjmp.h>
 #include <time.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <termios.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include <signal.h>
 
-#include "flash.h"
 #include "elf.h"
 #include "b.out.h"
 #include "spede.h"
@@ -109,9 +115,9 @@ int main(int argc, char **argv) {
     dev        = argv[optind++];
     fname      = argv[optind++];
     start_time = (time_t)0;
-    rc = download(fname, dev);
+    rc         = download(fname, dev);
 
-    return rc ;
+    return rc;
 }
 
 /*
@@ -521,7 +527,7 @@ int grok_object_file(FILE *imagef, struct bhdr *filehdr, long *pBlockCnt) {
          *  code and data size.  Then rewind the file so the downloader
          *  will start at the header and work from there.
          */
-        fseek(imagef, OFFSETOF(Elf32_Ehdr, e_entry), SEEK_SET);
+        fseek(imagef, offsetof(Elf32_Ehdr, e_entry), SEEK_SET);
         get386(imagef, (char *)&temp32, 4);
         filehdr->entry = temp32;
 
@@ -558,7 +564,7 @@ int grok_object_file(FILE *imagef, struct bhdr *filehdr, long *pBlockCnt) {
         get386(imagef, (char *)&magicnum, sizeof(magicnum));
         start_addr = (char *)magicnum;
 
-        fseek(imagef, offset + OFFSETOF(Elf32_Phdr, p_filesz), SEEK_SET);
+        fseek(imagef, offset + offsetof(Elf32_Phdr, p_filesz), SEEK_SET);
         get386(imagef, (char *)&temp32, 4); /* File Size */
                                             /*  printf(" ELF load size = 0x%x\n", temp32); */
         size = (temp32 + 0x7f) >> 7;
@@ -655,10 +661,10 @@ int grok_object_file(FILE *imagef, struct bhdr *filehdr, long *pBlockCnt) {
 /* --------------------------------------------------------------- */
 
 int read_sbbb(FILE *imagef) {
-    long addr;
-    int  c, count;
+    long          addr;
+    int           c, count;
     unsigned char bufr[1024];
-    int  bufcnt;
+    int           bufcnt;
 
     addr = (long)start_addr;
     while (feof(imagef) == 0) { /* not yet at end of file */
@@ -687,11 +693,11 @@ int read_sbbb(FILE *imagef) {
 } /* end read_sbbb() */
 
 int read_elf(FILE *imagef, long size) {
-    long addr;
-    int  c, count;
+    long          addr;
+    int           c, count;
     unsigned char bufr[1024];
-    int  bufcnt;
-    int  remaining_bufcnt = size;
+    int           bufcnt;
+    int           remaining_bufcnt = size;
 
     /*  Send the ELF header down to target. */
     addr   = (long)start_addr;
@@ -737,10 +743,10 @@ int read_elf(FILE *imagef, long size) {
 } /* end read_elf() */
 
 int read_abm(FILE *imagef) {
-    long addr, code_size;
-    int  c, count;
+    long          addr, code_size;
+    int           c, count;
     unsigned char bufr[1024];
-    int  bufcnt;
+    int           bufcnt;
 
     while (feof(imagef) == 0) { /* not yet at end of file */
         /* get current address and size */

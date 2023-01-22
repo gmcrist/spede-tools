@@ -1,16 +1,20 @@
-/*  flint.c    Flint shell (main)                      Sudhir, may 1993 */
-/* $Header: /export/home/aleks/Projects/Intel-159/Samples/00-Tools/flash/source/RCS/flint.c,v 1.3
- * 2000/02/19 21:27:07 aleks Exp $ */
-
-/* ------------------------------------------
- *   Why can't use just use `tip' ??
- * ------------------------------------------
+/**
+ *
+ * Original implementation
+ *   Sudhir, May 1993
  */
-
-#include "flash.h"
 
 #include <fcntl.h>
 #include <termios.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <signal.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/wait.h>
+
+#include "spede.h"
 
 struct termios otty, ntty;
 
