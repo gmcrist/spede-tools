@@ -37,6 +37,7 @@
 #define _INCL_ELF_H
 
 #include <sys/types.h>
+#include <stdint.h>
 
 /*
  * ELF definitions common to all 32-bit architectures.

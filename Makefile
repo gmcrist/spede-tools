@@ -18,16 +18,12 @@ CC := gcc
 CFLAGS += -Wall $(DEFINES)
 LDFLAGS +=
 
-SPEDE_FLASH = flash
 SPEDE_FLINT = fl
 SPEDE_DOWNLOAD = dl
 SPEDE_FLASHSUP = flash-sup
 
-DEFINES = -DTARGET_i386 -DFLASH_HOME=\"/gaia/home/project/spede2/Target-i386/i686/tools\" -DTTYPORT=\"/dev/ttyS0\" -DTTYBAUD=38400
+ALL_TARGETS=$(SPEDE_FLINT) $(SPEDE_DOWNLOAD) $(SPEDE_FLASHSUP)
 
-ALL_TARGETS=$(SPEDE_FLASH) $(SPEDE_FLINT) $(SPEDE_DOWNLOAD) $(SPEDE_FLASHSUP)
-
-OBJS_FLASH = $(BUILD_DIR)/flash.o $(BUILD_DIR)/cmdinp.o $(BUILD_DIR)/getch.o
 OBJS_FLINT = $(BUILD_DIR)/flint.o $(BUILD_DIR)/flsh.o
 OBJS_DOWNLOAD = $(BUILD_DIR)/download.o
 OBJS_FLASHSUP = $(BUILD_DIR)/flash-sup.o
@@ -43,13 +39,10 @@ clean:
 	@rm -f $(BUILD_DIR)/*
 
 install: $(ALL_TARGETS)
-	install -d $(SPEDE_ROOT)
-	install -d $(BINDIR)
-	install -d $(ETCDIR)
-	(cd $(BUILD_DIR); install -m 0755 $(ALL_TARGETS) $(BINDIR))
-
-$(SPEDE_FLASH): $(OBJS_FLASH) $(HDR)
-	@$(CC) $(LDFLAGS) -o $(BUILD_DIR)/$(SPEDE_FLASH) $(OBJS_FLASH) $(LIBS)
+	@install -d $(SPEDE_ROOT)
+	@install -d $(BINDIR)
+	@install -d $(ETCDIR)
+	@(cd $(BUILD_DIR); install -m 0755 $(ALL_TARGETS) $(BINDIR))
 
 $(SPEDE_FLINT): $(OBJS_FLINT)
 	@$(CC) $(LDFLAGS) -o $(BUILD_DIR)/$(SPEDE_FLINT) $(OBJS_FLINT) $(LIBS)
