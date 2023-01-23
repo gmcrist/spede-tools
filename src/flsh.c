@@ -145,6 +145,8 @@ int upd_history(char *xbuf) {
 }
 
 int getcmd(char *dst, int type, char *cat) {
+    int val;
+
     switch (type) {
         case LAST:
             if (hndxtl != 0) {
@@ -155,7 +157,7 @@ int getcmd(char *dst, int type, char *cat) {
             break;
 
         case INDX:
-            int val = atoi(cat);
+            val = atoi(cat);
 
             if ((val < cur_cnt) && (val >= hndxhd)) {
                 strcpy(dst, htab[val - hndxhd].cmd);

@@ -312,7 +312,6 @@ void ResetAndCloseFiles(void) {
 } /* end ResetAndCloseFiles() */
 
 void Timeout(int unused) {
-    unused = unused;
     ResetAndCloseFiles();
 
     printf("Communication Error. %s Unable to download .\n", to_mesg);

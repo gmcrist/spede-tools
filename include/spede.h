@@ -23,4 +23,12 @@
 #define ELF 5
 #define SBBB 6 /* See http://www.acm.uiuc.edu/sigops/ */
 
+#ifndef CBAUD
+#define CBAUD 0010017
+#endif
+
+#ifndef XCASE
+#define XCASE 0000004
+#endif
+
 #endif
