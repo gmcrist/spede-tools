@@ -275,13 +275,12 @@ int download(const char *file, const char *dest) {
     }
 
     /*  Cancel the alarm.  Change 'start_time' into delta_time.  Tell user
-     *  where the code ended up.  Display bytes/per rate, rounded up.
-     *  (Floating-point rate was just too weird.)
+     *  where the code ended up.
      */
     alarm(0);
     start_time = time(NULL) - start_time;
-    fprintf(stderr, "Load Successful ; Code loaded at 0x%p (%d bytes/sec)\n", start_addr,
-            (int)((size * RECSIZ + RECSIZ / 2) / start_time));
+
+    fprintf(stderr, "Load Successful ; Code loaded at 0x%p\n", start_addr);
 
     ResetAndCloseFiles();
 
